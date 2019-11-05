@@ -2,65 +2,71 @@
 # -*- coding: utf-8 -*-
 
 
-def calculate():
-    print('\tВы запустили калькулятор!!\n')
-    count = 2
-    while count < 11:
+def input_num(input_text):
+    while True:
         try:
-            number_1 = float(input('Введите первое число: '))
-            operations = str(input(
-                'Введите математическую операцию(Сложение(+), Вычитание(-), Произведение(*), Деление(/)): '))
-            number_2 = float(input('Введите второе число: '))
-
+            number = float(input(input_text))
+            if number < 0:
+                print('Вы ввели отрицательное значение! Введите положительное.')
+                continue
+            break
         except ValueError:
-            print("\n Вы ввели неверное значение! Попробуйте снова!")
-            calculate()
+            print(" Вы ввели неверное значение! Попробуйте снова!\n")
+
+    return number
+
+
+def input_op(input_text):
+    operations_list = ('+', '-', '*', '/')
+    while True:
+        operation = input(input_text)
+        if operation in operations_list:
+            break
+        print('Вы ввели не поддрерживаемую математическую операцию!\n')
+
+    return operation
+
+
+def calculate(number_1, count):
+    result = 0
+    while count < 11:
+        operations = input_op(
+            'Введите математическую операцию(Сложение(+), Вычитание(-), Произведение(*), Деление(/)): ')
+        number_2 = input_num('Введите следующее число: ')
+
+        if operations == '+':
+            result = number_1 + number_2
+            print('Сумма чисел равна: ', result)
+            count += 1
+
+        if operations == '-':
+            result = number_1 - number_2
+            print('Разность чисел равна: ', result)
+            count += 1
+
+        if operations == '*':
+            result = number_1 * number_2
+            print('Произведение числе равно: ', result)
+            count += 1
+
+        if operations == '/':
+            while number_2 == 0:
+                print('делить на 0 нельзя!')
+                number_2 = input_num('Введите другое число не равное 0!:')
+            result = number_1 / number_2
+            print('Деление чисел равно: ', result)
+            count += 1
+
+        s = input('Ввести еще 1 значение? (Y/N): ')
+        if s.upper() == 'Y':
+            calculate(result, count)
 
         else:
-            if operations == '+':
-                count += 1
-                result = number_1 + number_2
-                print('Сумма чисел равна: ', result)
-
-            elif operations == '-':
-                result = number_1 - number_2
-                print('Разность числе равна: ', result)
-                count += 1
-
-            elif operations == '*':
-                result = number_1 * number_2
-                print('Произведение числе равно: ', result)
-                count += 1
-
-            elif operations == '/' and number_2 == 0:
-                print('делить на 0 нельзя!')
-                continue
-
-            elif operations == '/' and number_2 != 0:
-                result = number_1 / number_2
-                print('Деление чисел равно: ', result)
-                count += 1
-
-            else:
-                print('Вы ввели не поддрерживаемую математическую операцию!')
-                calculate()
-
-            # new_result += result
-            s = input('Ввести еще 1 значение? (Y/N): ')
-            if s.upper() == 'Y':
-                print()
-                # print('Текущий результат:', new_result)
-
-            elif s.upper() == 'N':
-                # final_result = new_result + result
-                # print('Программа завершена! Итоговый результат: ', final_result)
-                print('Количество введенных чисел равно:', count)
-                count = 11
-
-            else:
-                calculate()
+            print('\nПрограмма завершена! Итоговый результат: ', result)
+            print('Количество введенных чисел равно:', count)
+        break
 
 
-calculate()
-
-# Необходимо решить проблему с счетчиком и итогового результата. Так же добавить ограничения на отрицательные  числа.
+print('\tВы запустили калькулятор!!\n')
+first_number = input_num('Введите первое число: ')
+calculate(first_number, 1)
